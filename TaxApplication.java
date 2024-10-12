@@ -25,7 +25,7 @@ public class TaxApplication {
 
 		if (contractType == 'E') {
 			processEmploymentTaxes(income);
-		} else if (umowacontractType == 'C') {
+		} else if (contractType == 'C') {
 			processContractTaxes(income);
 		} else {
 			System.out.println("Unknown type of contract!");
