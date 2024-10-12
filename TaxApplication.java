@@ -15,7 +15,7 @@ public class TaxApplication {
 
 		try {
 			InputStreamReader isr = new InputStreamReader(System.in);
-			BufferedReader br = new BufferedReader(isr));
+			BufferedReader br = new BufferedReader(isr);
 
 			System.out.print("Enter income: ");
 			income = Double.parseDouble(br.readLine());
