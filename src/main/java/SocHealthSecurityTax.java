@@ -1,5 +1,3 @@
-package com.bartoszwalter.students.taxes;
-
 public class SocHealthSecurityTax {
 
 	private final double socHealth1;

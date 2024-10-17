@@ -1,5 +1,3 @@
-package com.bartoszwalter.students.taxes;
-
 public class TaxCalculator {
 
 	static double calculateAdvanceTaxPaid(double advanceTax, double socHealth2, double taxFreeIncome) {
@@ -28,5 +26,9 @@ public class TaxCalculator {
 																	 SocHealthSecurityTax socHealthSecurityTax, double advanceTaxPaid) {
 		return income - ((socTaxesWithIncome.getSocSecurity() + socTaxesWithIncome.getSocHealthSecurity()
 				+ socTaxesWithIncome.getSocSickSecurity()) + socHealthSecurityTax.getSocHealth1() + advanceTaxPaid);
+	}
+
+	static double calculateDeductibleExpenses(double income) {
+		return (income * 20) / 100;
 	}
 }

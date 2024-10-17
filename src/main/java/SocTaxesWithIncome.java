@@ -1,5 +1,3 @@
-package com.bartoszwalter.students.taxes;
-
 public class SocTaxesWithIncome {
 	private final double socSecurity;
 	private final double socHealthSecurity;
