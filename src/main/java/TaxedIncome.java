@@ -1,3 +1,5 @@
+package com.bartoszwalter.students.taxes.src.main.java;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +40,4 @@ public class TaxedIncome {
         this.contractType = contractType;
         this.declaredIncome = declaredIncome;
     }
-
-
 }
