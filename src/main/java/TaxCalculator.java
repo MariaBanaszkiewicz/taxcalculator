@@ -1,34 +1,52 @@
+import java.text.DecimalFormat;
+
 public class TaxCalculator {
 
-	static double calculateAdvanceTaxPaid(double advanceTax, double socHealth2, double taxFreeIncome) {
-		return advanceTax - socHealth2 - taxFreeIncome;
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#");
+
+	private final TaxedIncome taxedIncome;
+
+	public TaxCalculator(TaxedIncome taxedIncome){
+		this.taxedIncome = taxedIncome;
 	}
 
-	static double calculateAdvanceTax(double income) {
-		return (income * 18) / 100;
+	void calculateAdvanceTaxPaid() {
+		taxedIncome.setAdvanceTaxPaid(Double.parseDouble(DECIMAL_FORMAT.format(taxedIncome.getAdvanceTax() - taxedIncome.getSocHealth7p75Percent() - taxedIncome.getTaxFreeIncome())));
 	}
 
-	static SocTaxesWithIncome calculateIncome(double income) {
-		double socSecurity = (income * 9.76) / 100;
-		double socHealthSecurity = (income * 1.5) / 100;
-		double socSickSecurity = (income * 2.45) / 100;
-		return new SocTaxesWithIncome(socSecurity, socHealthSecurity, socSickSecurity,
-				(income - socSecurity - socHealthSecurity - socSickSecurity));
+	void calculateAdvanceTax() {
+		taxedIncome.setAdvanceTax((taxedIncome.getIncomeAfterDeductions() * 18) / 100);
 	}
 
-	static SocHealthSecurityTax calculateOtherTaxes(double income) {
-		double socHealth1 = (income * 9) / 100;
-		double socHealth2 = (income * 7.75) / 100;
-		return new SocHealthSecurityTax(socHealth1, socHealth2);
+	void calculateSecurityTaxes() {
+		Double income = taxedIncome.getDeclaredIncome();
+		taxedIncome.setSocSecurity((income * 9.76) / 100);
+		taxedIncome.setSocHealthSecurity((income * 1.5) / 100);
+		taxedIncome.setSocSickSecurity((income * 2.45) / 100);
+		taxedIncome.setIncomeReducedBySecurityTaxes(income
+				- taxedIncome.getSocSecurity()
+				- taxedIncome.getSocHealthSecurity()
+				- taxedIncome.getSocSickSecurity());
+
 	}
 
-	static double calculateNetIncome(double income, SocTaxesWithIncome socTaxesWithIncome,
-																	 SocHealthSecurityTax socHealthSecurityTax, double advanceTaxPaid) {
-		return income - ((socTaxesWithIncome.getSocSecurity() + socTaxesWithIncome.getSocHealthSecurity()
-				+ socTaxesWithIncome.getSocSickSecurity()) + socHealthSecurityTax.getSocHealth1() + advanceTaxPaid);
+	void calculateSocHealthTaxes() {
+		//FIXME: originally income only reassigned in Civil type
+		Double income = taxedIncome.getIncomeReducedBySecurityTaxes();
+		taxedIncome.setSocHealth9Percent((income * 9) / 100);
+		taxedIncome.setSocHealth7p75Percent((income * 7.75) / 100);
 	}
 
-	static double calculateDeductibleExpenses(double income) {
-		return (income * 20) / 100;
+	void calculateNetIncome() {
+		taxedIncome.setNetIncome(taxedIncome.getIncomeReducedBySecurityTaxes() - taxedIncome.getSocHealth9Percent() - taxedIncome.getAdvanceTaxPaid());
+	}
+
+	//FIXME: originally only calculated in Civil type but used in both
+	void calculateDeductibleExpenses() {
+		taxedIncome.setTaxDeductibleExpenses((taxedIncome.getIncomeReducedBySecurityTaxes() * 20) / 100);
+	}
+
+	void calculateIncomeAfterDeductions(){
+		taxedIncome.setIncomeAfterDeductions(Double.parseDouble(DECIMAL_FORMAT.format(taxedIncome.getIncomeReducedBySecurityTaxes() - taxedIncome.getTaxDeductibleExpenses())));
 	}
 }

@@ -14,7 +14,7 @@ public enum ContractType {
         }
     }
 
-    public final Character label;
+    private final Character label;
 
     ContractType(Character label) {
         this.label = label;

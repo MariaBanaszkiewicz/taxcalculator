@@ -5,42 +5,40 @@ import java.text.DecimalFormat;
 @Slf4j
 public class TaxProcessor {
 
-    private static final DecimalFormat DECIMAL_FORMAT_00 = new DecimalFormat("#.00");
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#");
 
 
-    public static void processTax(ContractType contractType, double income){
-        log.info(contractType.name());
-        log.info("Income " + income);
 
-        SocTaxesWithIncome socTaxesWithIncome = TaxCalculator.calculateIncome(income);
-        displaySocialTaxes(socTaxesWithIncome);
+    public static void processTax(TaxedIncome taxedIncome){
 
-        //FIXME: originally only reassigned in Civil type
-        income = socTaxesWithIncome.getIncome();
 
-        SocHealthSecurityTax socHealthSecurityTax = TaxCalculator.calculateOtherTaxes(income);
+        TaxCalculator taxCalculator = new TaxCalculator(taxedIncome);
+        TaxLogger taxLogger = new TaxLogger(taxedIncome);
 
-        //FIXME: originally only calculated in Civil type but used in both
-        double taxDeductibleExpenses = TaxCalculator.calculateDeductibleExpenses(income);
+        taxLogger.displayContractTypeAndDeclaredIncome();
 
-        double taxedIncome = Double.parseDouble(DECIMAL_FORMAT.format(income - taxDeductibleExpenses));
+        taxCalculator.calculateSecurityTaxes();
+        taxLogger.displaySocialTaxes();
 
-        double advanceTax = TaxCalculator.calculateAdvanceTax(taxedIncome);
+        taxCalculator.calculateSocHealthTaxes();
+        taxLogger.displayHealthSecTaxes();
 
-        double taxFreeIncome = 0;
+        taxCalculator.calculateDeductibleExpenses();
+        taxLogger.displayTaxDeductibleExpenses();
 
-        double advanceTaxPaid = TaxCalculator.calculateAdvanceTaxPaid(advanceTax, socHealthSecurityTax.getSocHealth2(), taxFreeIncome);
+        taxCalculator.calculateIncomeAfterDeductions();
+        taxLogger.displayIncomeAfterDeductions();
 
-        double advanceTaxPaidRounded = Double.parseDouble(DECIMAL_FORMAT.format(advanceTaxPaid));
+        taxCalculator.calculateAdvanceTax();
+        taxLogger.displayAdvanceTax();
 
-        double netIncome = TaxCalculator.calculateNetIncome(income, socTaxesWithIncome, socHealthSecurityTax, advanceTaxPaidRounded);
+        taxedIncome.setTaxFreeIncome(0d);
+
+        taxCalculator.calculateAdvanceTaxPaid();
+        taxLogger.displayAdvanceTaxPaid();
+
+        taxCalculator.calculateNetIncome();
+        taxLogger.displayNetIncome();
 
     }
 
-    private static void displaySocialTaxes(SocTaxesWithIncome socTaxes) {
-        log.info("Social security tax = " + DECIMAL_FORMAT_00.format(socTaxes.getSocSecurity()));
-        log.info("Health social security tax = " + DECIMAL_FORMAT_00.format(socTaxes.getSocHealthSecurity()));
-        log.info("Sickness security tax = " + DECIMAL_FORMAT_00.format(socTaxes.getSocSickSecurity()));
-    }
 }
