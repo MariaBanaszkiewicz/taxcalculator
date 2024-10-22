@@ -1,11 +1,16 @@
-package com.bartoszwalter.students.taxes.src.main.java;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.text.DecimalFormat;
 
 @Slf4j
 public class TaxProcessor {
 
+
+
+
     public static void processTax(TaxedIncome taxedIncome){
+
+
         TaxCalculator taxCalculator = new TaxCalculator(taxedIncome);
         TaxLogger taxLogger = new TaxLogger(taxedIncome);
 

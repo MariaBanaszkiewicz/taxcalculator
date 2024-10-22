@@ -1,5 +1,3 @@
-package com.bartoszwalter.students.taxes.src.main.java;
-
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.DecimalFormat;

@@ -1,5 +1,3 @@
-package com.bartoszwalter.students.taxes.src.main.java;
-
 import java.text.DecimalFormat;
 
 public class TaxCalculator {
@@ -33,6 +31,7 @@ public class TaxCalculator {
 	}
 
 	void calculateSocHealthTaxes() {
+		//FIXME: originally income only reassigned in Civil type
 		Double income = taxedIncome.getIncomeReducedBySecurityTaxes();
 		taxedIncome.setSocHealth9Percent((income * 9) / 100);
 		taxedIncome.setSocHealth7p75Percent((income * 7.75) / 100);
@@ -42,6 +41,7 @@ public class TaxCalculator {
 		taxedIncome.setNetIncome(taxedIncome.getIncomeReducedBySecurityTaxes() - taxedIncome.getSocHealth9Percent() - taxedIncome.getAdvanceTaxPaid());
 	}
 
+	//FIXME: originally only calculated in Civil type but used in both
 	void calculateDeductibleExpenses() {
 		taxedIncome.setTaxDeductibleExpenses((taxedIncome.getIncomeReducedBySecurityTaxes() * 20) / 100);
 	}

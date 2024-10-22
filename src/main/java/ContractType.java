@@ -1,11 +1,10 @@
-package com.bartoszwalter.students.taxes.src.main.java;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public enum ContractType {
     EMPLOYMENT('E'),
-    CIVIL('C');
+    CIVIL('C')
+    ;
 
     private static final Map<Character, ContractType> BY_LABEL = new HashMap<>();
 
