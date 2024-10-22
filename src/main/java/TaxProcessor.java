@@ -5,14 +5,16 @@ import java.text.DecimalFormat;
 @Slf4j
 public class TaxProcessor {
 
+    private final TaxCalculator taxCalculator;
+    private final TaxLogger taxLogger;
+
+    public TaxProcessor(TaxCalculator taxCalculator, TaxLogger taxLogger){
+        this.taxCalculator = taxCalculator;
+        this.taxLogger = taxLogger;
+    }
 
 
-
-    public static void processTax(TaxedIncome taxedIncome){
-
-
-        TaxCalculator taxCalculator = new TaxCalculator(taxedIncome);
-        TaxLogger taxLogger = new TaxLogger(taxedIncome);
+    public void processTax(){
 
         taxLogger.displayContractTypeAndDeclaredIncome();
 
@@ -31,7 +33,7 @@ public class TaxProcessor {
         taxCalculator.calculateAdvanceTax();
         taxLogger.displayAdvanceTax();
 
-        taxedIncome.setTaxFreeIncome(0d);
+        taxCalculator.calculateTaxFreeIncome();
 
         taxCalculator.calculateAdvanceTaxPaid();
         taxLogger.displayAdvanceTaxPaid();

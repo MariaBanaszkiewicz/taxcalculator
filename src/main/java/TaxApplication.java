@@ -20,11 +20,21 @@ public class TaxApplication {
 			return;
 		}
 
-		if (contractType != null){
-			TaxProcessor.processTax(new TaxedIncome(contractType, income));
-		} else {
+		if (contractType == null ) {
 			System.out.println("Unknown type of contract!");
+			return;
 		}
+
+		TaxedIncome taxedIncome = new TaxedIncome(contractType, income);
+		TaxCalculator taxCalculator =
+		switch(contractType) {
+			case CIVIL -> new CivilTaxCalculator(taxedIncome);
+			case EMPLOYMENT -> new EmploymentTaxCalculator(taxedIncome);
+		};
+		TaxProcessor taxProcessor = new TaxProcessor(taxCalculator, new TaxLogger(taxedIncome));
+
+		taxProcessor.processTax();
+
 	}
 
 	private static double obtainIncomeInput() throws Exception {
